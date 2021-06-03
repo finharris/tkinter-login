@@ -1,4 +1,3 @@
-username,password,lastLogin
-fin,finsPassword,
-notFin,notFinsPassword,
-newFin,newfinspassword,<class 'datetime.datetime'>
+username,password,lastLogin,accountCreated
+fin,05581aa780fd13e1d6f34db3b0e022a75eaccffd2c46b9bd673e537fb2e3dcf8,03/06/2021 14:56:51,03/06/2021 14:56:35
+test,bdb5e6852376838558550fe6937b8750f0122b8580c0906468e70d1c60dfaa91,N/A,03/06/2021 14:57:10

@@ -1,6 +1,6 @@
 import csv
 import hashlib
-import datetime
+from datetime import datetime
 from tkinter import *
 from tkinter import Button, Tk
 from tkinter.messagebox import showinfo
@@ -24,6 +24,10 @@ def hashPassword(password):
   return hashlib.sha256(str.encode(password)).hexdigest()
 
 
+def getCurrentDatetime():
+  return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+
 def login():
   usernameValue = username.get()
   passwordValue = password.get()
@@ -36,8 +40,11 @@ def login():
   # find valid username and password in csv and check against them
   user = fetchUser(usernameValue)
   if user and user['password'] == hashPassword(passwordValue):
-    showinfo("Sucessful login", f"Welcome, {user['username']}.")
+    showinfo("Sucessful login", f"Welcome, {user['username']}.\n Last login: {user['lastLogin']}\nAccount Created: {user['accountCreated']}")
     
+    for elem in userData:
+      if elem['username'] == usernameValue:
+        elem['lastLogin'] = getCurrentDatetime()
   else:
     showinfo('Login failure', 'Please ensure your username and password are valid.')
 
@@ -56,8 +63,11 @@ def signup():
       showinfo('User already exists', 'A user with that username already exists, try another username.')
       return
   
-  userData.append({'username': usernameValue,'password': passwordValue,'lastLogin': datetime.datetime})
+  userData.append({'username': usernameValue,'password': hashPassword(passwordValue),'lastLogin': 'N/A', 'accountCreated': getCurrentDatetime()})
   showinfo('Sucess', f'Welcome, {usernameValue}, your account has been created.')
+  
+  username.delete(0,END)
+  password.delete(0,END)
 
 
 # DEFINE ROOT
@@ -99,7 +109,7 @@ signupButton.pack()
 root.mainloop()
 
 with open('users.csv', 'w', newline='') as f:
-  writer = csv.DictWriter(f, fieldnames=['username','password','lastLogin'])
+  writer = csv.DictWriter(f, fieldnames=['username','password','lastLogin','accountCreated'])
   writer.writeheader()
   for elem in userData:
     writer.writerow(elem)
