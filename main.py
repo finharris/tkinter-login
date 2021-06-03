@@ -1,6 +1,26 @@
+import csv
+import hashlib
 from tkinter import *
-from tkinter import Button, Tk, HORIZONTAL
+from tkinter import Button, Tk
 from tkinter.messagebox import showinfo
+
+
+userData = []
+with open('users.csv', 'r') as f:
+  file = csv.DictReader(f)
+  for elem in file:
+    userData.append(elem)
+
+
+def fetchUser(username):
+  for elem in userData:
+    if elem['username'] == username:
+      return elem
+  return None
+
+
+def hashPassword(password):
+  return hashlib.sha256(str.encode(password)).hexdigest()
 
 
 def login():
@@ -8,12 +28,17 @@ def login():
   passwordValue = password.get()
   
   if len(usernameValue) < 1 or len(passwordValue) < 1:
-    # SHOW POPUP
+    # show popup
     showinfo("Error", "Please ensure all fields are filled out.")
     return
   
-  # FIND VALID USERNAME AND PASSWORD IN CSV AND CHECK AGAINST THEM
-  # COULD USE CODE FROM OTHER PROJECT
+  # find valid username and password in csv and check against them
+  user = fetchUser(usernameValue)
+  if user and user['password'] == hashPassword(passwordValue):
+    showinfo("Sucessful login", f"Welcome, {user['username']}.")
+    
+  else:
+    showinfo('Login failure', 'Please ensure your username and password are valid.')
 
 
 # DEFINE ROOT
@@ -43,9 +68,16 @@ password.pack()
 # CLOSE CONTAINER
 container.pack(padx=10,pady=10)
 
-# SUBMIT BUTTON
-submitButton = Button(root, command=login, text='Login')
-submitButton.pack()
+# LOGIN BUTTON
+loginButton = Button(root, command=login, text='Login')
+loginButton.pack()
 
 # MAIN LOOP
 root.mainloop()
+
+with open('users.csv', 'w', newline='') as f:
+  writer = csv.DictWriter(f, fieldnames=['username','password','lastLogin'])
+  writer.writeheader()
+  for elem in userData:
+    print(elem)
+    writer.writerow(elem)
