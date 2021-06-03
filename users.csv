@@ -1,3 +1,4 @@
 username,password,lastLogin
 fin,finsPassword,
 notFin,notFinsPassword,
+newFin,newfinspassword,<class 'datetime.datetime'>

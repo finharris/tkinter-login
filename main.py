@@ -1,5 +1,6 @@
 import csv
 import hashlib
+import datetime
 from tkinter import *
 from tkinter import Button, Tk
 from tkinter.messagebox import showinfo
@@ -41,6 +42,24 @@ def login():
     showinfo('Login failure', 'Please ensure your username and password are valid.')
 
 
+def signup():
+  usernameValue = username.get()
+  passwordValue = password.get()
+  
+  if len(usernameValue) < 1 or len(passwordValue) < 1:
+    # show popup
+    showinfo("Error", "Please ensure all fields are filled out.")
+    return
+
+  for elem in userData:
+    if elem['username'] == usernameValue:
+      showinfo('User already exists', 'A user with that username already exists, try another username.')
+      return
+  
+  userData.append({'username': usernameValue,'password': passwordValue,'lastLogin': datetime.datetime})
+  showinfo('Sucess', f'Welcome, {usernameValue}, your account has been created.')
+
+
 # DEFINE ROOT
 root = Tk()
 root.title("Test Tkinter App")
@@ -72,6 +91,10 @@ container.pack(padx=10,pady=10)
 loginButton = Button(root, command=login, text='Login')
 loginButton.pack()
 
+# SIGNUP BUTTON
+signupButton = Button(root, command=signup, text='Signup')
+signupButton.pack()
+
 # MAIN LOOP
 root.mainloop()
 
@@ -79,5 +102,4 @@ with open('users.csv', 'w', newline='') as f:
   writer = csv.DictWriter(f, fieldnames=['username','password','lastLogin'])
   writer.writeheader()
   for elem in userData:
-    print(elem)
     writer.writerow(elem)
