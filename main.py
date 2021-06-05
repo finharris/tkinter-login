@@ -70,6 +70,74 @@ def signup():
   password.delete(0,END)
 
 
+def save():
+  with open('users.csv', 'w', newline='') as f:
+    writer = csv.DictWriter(f, fieldnames=['username','password','lastLogin','accountCreated'])
+    writer.writeheader()
+    for elem in userData:
+      writer.writerow(elem)
+
+
+def printUserData():
+  for elem in userData:
+    for key, value in elem.items():
+      # print(key, ' : ', value)
+      print(f"'{key}': '{value}'")
+    print('')
+
+
+def openAdminLogin():
+  adminLogin = Tk()
+  adminLogin.attributes('-topmost', True)
+  adminLogin.title('Admin Panel')
+  adminLogin.geometry('600x320')
+  
+  login = Frame(adminLogin, relief=RAISED, borderwidth=4)
+  
+  adminPasswordLabel = Label(text='Admin Password:', master=login)
+  adminPassword = Entry(master=login)
+  adminPasswordLabel.pack()
+  adminPassword.pack()
+  
+  adminLoginButton = Button(master=login, text='Login', command=lambda: openAdminPanel(adminLogin, adminPassword))
+  adminLoginButton.pack()
+  
+  login.pack()
+  
+  adminLogin.mainloop()
+  return
+
+
+def backToAdminLogin(window):
+  window.destroy()
+  openAdminLogin()
+
+
+def openAdminPanel(prevWindow, adminPassword):
+  psw = adminPassword.get()
+  
+  if len(psw) < 1:
+    return
+  
+  if psw == 'admin':
+    prevWindow.destroy()
+  else:
+    showinfo('Incorrect Admin Password', 'The admin password you entered was incorrect.')
+    return
+
+  adminPanel = Tk()
+  adminPanel.title('Admin Panel')
+  adminPanel.geometry('600x320')
+  
+  printUsers = Button(adminPanel, text='Print User Data', command=printUserData)
+  printUsers.pack()
+  
+  backButton = Button(adminPanel, text='Back', command=lambda: backToAdminLogin(adminPanel))
+  backButton.pack(side=BOTTOM)
+  
+  adminPanel.mainloop()
+
+
 # DEFINE ROOT
 root = Tk()
 root.title("Test Tkinter App")
@@ -105,11 +173,12 @@ loginButton.pack()
 signupButton = Button(root, command=signup, text='Signup')
 signupButton.pack()
 
+# ADMIN BUTTON
+adminbutton = Button(root, command=openAdminLogin, text='Admin Panel')
+adminbutton.pack(side=BOTTOM)
+
 # MAIN LOOP
 root.mainloop()
 
-with open('users.csv', 'w', newline='') as f:
-  writer = csv.DictWriter(f, fieldnames=['username','password','lastLogin','accountCreated'])
-  writer.writeheader()
-  for elem in userData:
-    writer.writerow(elem)
+# after window close save the data
+save()
