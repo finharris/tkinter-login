@@ -132,7 +132,7 @@ def openAdminPanel(prevWindow, adminPassword):
   printUsers = Button(adminPanel, text='Print User Data', command=printUserData)
   printUsers.pack()
   
-  backButton = Button(adminPanel, text='Back', command=lambda: backToAdminLogin(adminPanel))
+  backButton = Button(adminPanel, text='Logout', command=lambda: backToAdminLogin(adminPanel))
   backButton.pack(side=BOTTOM)
   
   adminPanel.mainloop()
