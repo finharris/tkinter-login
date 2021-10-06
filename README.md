@@ -5,7 +5,7 @@ This is a login page created with the tkinter library in python.
 Testing accounts:
 
 - {'username': 'fin',
-  'password': 'finsPassword' }
+  'password': 'fin1' }
 
-- {'username': 'test',
-  'password': 'testsPassword'}
+- {'username': 'admin',
+  'password': 'admin1'}
