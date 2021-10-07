@@ -74,7 +74,9 @@ def loginpage():
             password['show'] = ''
 
     login_page = Tk()
-    login_page.geometry('400x400')
+    # login_page.geometry('400x400')
+    # login_page.attributes("-fullscreen", True)
+    login_page.state('zoomed')
     login_page.title('Login')
 
     title = Label(login_page, text='Login')
@@ -133,7 +135,8 @@ def signuppage():
             su_password['show'] = ''
 
     signup_page = Tk()
-    signup_page.geometry('400x400')
+    # signup_page.geometry('400x400')
+    signup_page.state('zoomed')
     signup_page.title('Login')
 
     signup_page.bind('<Return>', callback)
@@ -184,7 +187,8 @@ def controlpanel(usn):
         return
 
     control_panel = Tk()
-    control_panel.geometry('800x500')
+    # control_panel.geometry('800x500')
+    control_panel.state('zoomed')
     control_panel.title(usn)
 
     welcome = Label(text=f'Welcome, {usn.capitalize()}.')
